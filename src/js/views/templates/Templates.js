@@ -134,7 +134,8 @@ class TemplateTypes {
             // {"value": "fw_version", "label": "Firmware Version" },
             {"value": "protocol", "label": "Protocol"},
             {"value": "topic", "label": "Topic"},
-            {"value": "translator", "label": "Translator"}
+            {"value": "translator", "label": "Translator"},
+            {"value": "device_timeout", "label": "Device Timeout"}
         ];
     }
     getValueTypes() {
