@@ -345,6 +345,30 @@ body {
   z-index: 9999 !important;
 }
 
+
+.display-flex
+{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.flex-order-2{
+order: 2;
+}
+
+.flex-order-1{
+order: 1;
+}
+
+
+.mg20px{
+  margin: 20px;
+}
+.mg0px
+{
+  margin:0px !important;
+}
+
 @import 'inputs';
 @import 'shadow';
 @import 'list';
