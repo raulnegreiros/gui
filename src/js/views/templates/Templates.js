@@ -873,14 +873,14 @@ class ListItem extends Component {
 
         let attrs = this.state.template.data_attrs.length + this.state.template.config_attrs.length;
         return (
-            <div>
+            <div className={"mg20px "+ (this.state.template.isNewTemplate ? 'flex-order-1' : 'flex-order-2')}>
             {this.state.show_image_modal ? (
                 <AltContainer store={ImageStore}>
                         <ImageModal updateDefaultVersion={this.updateDefaultVersion} template={this.state.template} refreshImages={this.refreshImages} toggleModal={this.toggleImageModal} />
                 </AltContainer>
             ) : null }
 
-            <div className={"template card-size lst-entry-wrapper z-depth-2 " + (this.state.isSuppressed ? 'suppressed' : 'full-height')}
+                <div className={"template card-size lst-entry-wrapper z-depth-2 mg0px " + (this.state.isSuppressed ? 'suppressed' : 'full-height')}
                 id={this.props.id}>
                 {this.state.show_modal ?(
                   <RemoveModal name={"template"} remove={this.deleteTemplate} openModal={this.openModal} />
@@ -1143,7 +1143,7 @@ class TemplateList extends Component {
         <ReactCSSTransitionGroup transitionName="templatesSubHeader">
           {header}
         </ReactCSSTransitionGroup>
-            {this.filteredList.length > 0 ? <div className="col s12 lst-wrapper w100">
+            {this.filteredList.length > 0 ? <div className="col s12 lst-wrapper w100 display-flex">
                 {this.filteredList.map(template => (
                   <ListItem
                     template={template}

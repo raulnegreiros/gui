@@ -92,7 +92,7 @@ class RightSideBar extends Component {
   }
 
   render() {
-    console.log("this,props",this.props);
+    console.log("User: this.props",this.props);
 
     if (this.props.user == undefined) {
       console.error('no active user session');
