@@ -207,6 +207,7 @@ class StaticAttributes extends Component {
 
   render() {
 
+
     if (!this.props.attrs.length) {
       return (
         <div> </div>
@@ -317,8 +318,9 @@ class AttrBox extends Component {
   }
 
   render() {
-
+    console.log("")
     let attr_list = this.props.attrs.filter((attr) => { return attr.type == 'dynamic'});
+
     console.log("attr_list", attr_list);
     return <div >
         {attr_list.length > 0 ? <div className="col s12">
@@ -335,6 +337,33 @@ class AttrBox extends Component {
             })}
           </div> : null }
       </div>;
+  }
+}
+
+class AttrActuatorBox extends Component {
+  constructor(props) {
+    super(props);
+  }
+  
+  render(){
+    let attr_actuators_list = this.props.attrs.filter((attr) => { return attr.type == 'actuator'});
+    return(
+      <div>
+        {attr_actuators_list.length > 0 ? <div className="col s12">
+            {// <div className="icon">
+            //   <img src={"images/tag.png"} />
+            // </div>
+            attr_actuators_list.map((attr, index) => {
+              return <div key={index} className="col s4">
+                  <div className="bg-gray">
+                    <div className="attr-name">{attr.label}</div>
+                    <div className="attr-type">{attr.value_type}</div>
+                  </div>
+                </div>;
+            })}
+          </div> : null }
+      </div>
+    )
   }
 }
 
@@ -501,6 +530,7 @@ class DeviceForm extends Component {
   }
 
   render() {
+    console.log("PROPS-DEVICE-FORM: ", this.props);
     // preparing template list to be used
     let templates = this.props.templates.templates;
     for(let k in templates){
@@ -525,6 +555,14 @@ class DeviceForm extends Component {
                   </div>
                   {this.state.selectedTemplates.map(tplt => (
                     <AttrBox key={tplt.id} {...tplt} />
+                  ))}
+                </div>
+                <div className="attr-box">
+                  <div className="col s12">
+                    <div className="attr-title">Actuators</div>
+                  </div>
+                  {this.state.selectedTemplates.map(tplt => (
+                    <AttrActuatorBox key={tplt.id} {...tplt} />
                   ))}
                 </div>
               </div> : <div className="padding10 background-info pb160px">

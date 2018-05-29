@@ -48,6 +48,8 @@ class Util {
   }
 
   POST(url, payload) {
+    console.log("url: ", url);
+    console.log("payload: ", payload);
     return this._runFetch(url, {
       method: 'post',
       headers: new Headers({"content-type": "application/json"}),
@@ -193,6 +195,8 @@ class Util {
   isTypeValid(value, type, dynamic){
     let ret = {result: true, error: ""};
     if (dynamic === 'dynamic' && value.length === 0) return ret;
+    if(dynamic === 'actuator' && value.length === 0) return ret;
+
     const validator = {
       'string': function (value) {
         ret.result = value.trim().length > 0;

@@ -279,11 +279,42 @@ class DyAttributeArea extends Component {
         ))}
       </div>
       <div className="third-col">
-        <DynamicAttributeList device={this.props.device} attrs={lista} change_attr={this.toggleAttribute} />
+        <div className="row">
+          <DynamicAttributeList device={this.props.device} attrs={lista} change_attr={this.toggleAttribute} />        
+        </div>
+        <div className="row">
+          <ActuatorsArea actuators={this.props.actuators} />        
+        </div>
       </div>
     </div>
   }
 }
+
+class ActuatorsArea extends Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return <div className=" dy_attributes">
+        <div className="col s12 header">
+          <label className="col s8">Actuators</label>
+        </div>
+        <div className="col s12 body">
+          {this.props.actuators.map(actuator => (
+            <div key={actuator.label} className="line" >
+              <div className="col offset-s2 s8">
+                <div className="label truncate" title={actuator.label}>{actuator.label}</div>
+                {/* <div className="value-label">{attr.value_type}</div> */}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>;
+  }
+}
+
+
 
 
 class DynamicAttributeList extends Component {
@@ -589,6 +620,7 @@ class DeviceDetail extends Component {
   render() {
      let attr_list = [];
      let dal = [];
+     let actuators = [];
      let config_list = [];
      for (let index in this.props.device.attrs)
      {
@@ -600,6 +632,10 @@ class DeviceDetail extends Component {
            i.visible = false;
            return String(i.type) === "dynamic";
          }));
+        actuators = actuators.concat(tmp.filter(i => {
+          i.visible = false;
+          return String(i.type) === "actuator";
+        }));
       config_list = config_list.concat(tmp.filter(i => {
            return String(i.type) === "meta";
          }));
@@ -611,12 +647,13 @@ class DeviceDetail extends Component {
         }
      }
 
+     console.log("attrs: ", dal);
      return <div className="row detail-body">
          <div className="first-col">
            <Configurations device={this.props.device} attrs={config_list} />
            <StaticAttributes device={this.props.device} attrs={attr_list} openStaticMap={this.openStaticMap}/>
          </div>
-        <DyAttributeArea device={this.props.device} attrs={dal} openStaticMap={this.state.openStaticMap}/>
+        <DyAttributeArea device={this.props.device} actuators={actuators} attrs={dal} openStaticMap={this.state.openStaticMap}/>
        </div>;
   }
 }
