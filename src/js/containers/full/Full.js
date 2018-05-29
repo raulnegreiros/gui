@@ -101,8 +101,7 @@ class RightSideBar extends Component {
 
     let gravatar = "https://www.gravatar.com/avatar/" + btoa(this.props.user.username) + "?d=identicon";
 
-    return (
-      <div className="">
+    return <div className="">
         <div className="rightsidebarchild logout-page">
           {/*<div className="col s12 m12 logout-page-photo">
             <img src={gravatar} />
@@ -111,36 +110,49 @@ class RightSideBar extends Component {
             <div className="logout-page-subtitle">You are logged in!</div>
           </div>
 
-          <div className="col s12 m12">
-            <div className="logout-page-info truncate">{this.props.user.username}</div>
+          <div className="col s12 m12 pb20px">
+            <div className="logout-page-info truncate">
+              {this.props.user.username}
+            </div>
           </div>
 
           <div className="col s12 m12">
             <div className="logout-page-label"> Username</div>
           </div>
 
-          {(this.props.user.email != undefined) && (
-            <div>
-            <div className="col s12 m12">
-              <div className="logout-page-info truncate">{this.props.user.email}</div>
-            </div>
+          {this.props.user.email != undefined && <div>
+              <div className="col s12 m12">
+                <div className="logout-page-info truncate">
+                  {this.props.user.email}
+                </div>
+              </div>
 
-            <div className="col s12 m12">
-              <div className="logout-page-label"> E-mail</div>
+          <div className="col s12 m12 pb20px">
+                <div className="logout-page-label"> E-mail</div>
+              </div>
+            </div>}
+
+          <div className="col s12 m12">
+            <div className="logout-page-info truncate">
+              {this.props.user.service}
             </div>
-            </div>
-          )}
+          </div>
+
+        <div className="col s12 m12 pb20px">
+            <div className="logout-page-label"> Tenant</div>
+          </div>
 
           <div className="row logout-page-buttons">
-            <a className="waves-effect waves-light btn-flat btn-ciano" onClick={this.dismiss}>dismiss</a>
-            <button type="button" className="waves-effect waves-light btn-flat btn-ciano" onClick={this.logout}>logout</button>
+            <a className="waves-effect waves-light btn-flat btn-ciano" onClick={this.dismiss}>
+              dismiss
+            </a>
+            <button type="button" className="waves-effect waves-light btn-flat btn-ciano" onClick={this.logout}>
+              logout
+            </button>
           </div>
         </div>
-      <div className="rightsidebar" onClick={this.dismiss}>
-      </div>
-      </div >
-
-)
+        <div className="rightsidebar" onClick={this.dismiss} />
+      </div>;
   }
 }
 
