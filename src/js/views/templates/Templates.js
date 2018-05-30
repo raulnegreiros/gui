@@ -889,7 +889,7 @@ class ListItem extends Component {
                 </AltContainer>
             ) : null }
 
-                <div className={"template card-size lst-entry-wrapper z-depth-2 mg0px " + (this.state.isSuppressed ? 'suppressed' : 'full-height')}
+                <div className={"template card-size lst-entry-wrapper z-depth-2 mg0px height-auto " + (this.state.isSuppressed ? 'suppressed' : 'full-height')}
                 id={this.props.id}>
                 {this.state.show_modal ?(
                   <RemoveModal name={"template"} remove={this.deleteTemplate} openModal={this.openModal} />
