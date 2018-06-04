@@ -88,8 +88,10 @@ class DeviceStore {
   handleRemoveSingle(id) {
     if (this.devices.hasOwnProperty(id)) {
       delete this.devices[id];
+      this.deviceList = this.deviceList.filter(function(device) {
+        return device.id != id;
+      });
     }
-
     this.loading = false;
   }
 

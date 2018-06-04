@@ -103,6 +103,7 @@ class DeviceActions {
       dispatch();
       deviceManager.deleteDevice(device.id)
         .then((response) => {
+          this.removeSingle(device.id);
           if (cb) {
             cb(response);
           }
