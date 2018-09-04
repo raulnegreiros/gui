@@ -24,7 +24,7 @@ class PositionRenderer extends Component {
             selectedPin: true,
             layers: [],
             loadedLayers: false,
-            center: (this.props.config.mapCenter.length > 0 ? this.props.config.mapCenter : [-21.277057, -47.9590129]),
+            center: (this.props.config.mapCenter ? this.props.config.mapCenter : [-21.277057, -47.9590129]),
             zoom: (this.props.zoom ? this.props.zoom : this.props.config.mapZoom ? this.props.config.mapZoom : 7)
         };
 
@@ -202,7 +202,7 @@ class PositionRenderer extends Component {
             }}>
             <div className="col s12 layer-box" >
                 {
-                   (this.state.layers.length) ?
+                    (this.props.showLayersIcons && this.state.layers.length) ?
                         this.state.layers.map(lyr => (
                     <LayerBox
                         key={lyr.id}
@@ -467,7 +467,7 @@ class DeviceMap extends Component {
                 </div>
               <div className="deviceMapCanvas deviceMapCanvas-map col m12 s12 relative">
                 <Script url="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=zvpeonXbjGkoRqVMtyQYCGVn4JQG8rd9" onLoad={this.mqLoaded} />
-                {this.state.mapquest ? <PositionRenderer devices={pointList} toggleTracking={this.toggleTracking} allowContextMenu={true} listPositions={this.props.Measure.tracking} showPolyline={true} config={this.props.Config}/> : <div className="row full-height relative">
+                    {this.state.mapquest ? <PositionRenderer showLayersIcons={true} devices={pointList} toggleTracking={this.toggleTracking} allowContextMenu={true} listPositions={this.props.Measure.tracking} showPolyline={true} config={this.props.Config}/> : <div className="row full-height relative">
                     <div className="background-info valign-wrapper full-height">
                       <i className="fa fa-circle-o-notch fa-spin fa-fw horizontal-center" />
                     </div>
