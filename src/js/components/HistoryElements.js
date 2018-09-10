@@ -215,46 +215,33 @@ class HandleGeoElements extends Component{
       //dynamic attribute
       validDevices = this.handleDevicePosition(this.props.MeasureStore.data[this.props.device.id]);
     }
+    let geoconfs = this.props.Config; 
+    if (geoconfs == undefined) 
+      geoconfs = {};
 
     if (validDevices.length == 0) {
-      return <NoData />;
-    } else {
-      if(this.props.isStatic){
-        return(
-          <div className={"attributeBox " + (this.state.opened ? "expanded" : "compressed")}>
-            <div className="header">
-              <label>{this.props.label}</label>
-              {!this.state.opened ? <i onClick={this.toogleExpand.bind(this, true)} className="fa fa-expand" /> : <i onClick={this.toogleExpand.bind(this, false)} className="fa fa-compress" />}
-            </div>
-            <div>
-              <Script url="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=zvpeonXbjGkoRqVMtyQYCGVn4JQG8rd9"
-                      onLoad={this.mqLoaded}>
-              </Script>
-            </div>
-            {this.state.mapquest ? (
-              <PositionRenderer devices={validDevices} allowContextMenu={false} center={validDevices[0].position} zoom={14} showPolyline={false} config={this.props.Config}/>
-            ): (
-              <Loading />
-            )}
-          </div>
-        )
+        return <NoData />;
       } else {
-        return(
-          <span>
-            <div>
-              <Script url="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=zvpeonXbjGkoRqVMtyQYCGVn4JQG8rd9"
-                      onLoad={this.mqLoaded}>
-              </Script>
-            </div>
-            {this.state.mapquest ? (
-              <PositionRenderer devices={validDevices} allowContextMenu={false} center={validDevices[0].position} zoom={14} showPolyline={false} config={this.props.Config}/>
-            ): (
-              <Loading />
-            )}
-          </span>
-        )
+        if (this.props.isStatic) {
+          return <div className={"attributeBox " + (this.state.opened ? "expanded" : "compressed")}>
+              <div className="header">
+                <label>{this.props.label}</label>
+                {!this.state.opened ? <i onClick={this.toogleExpand.bind(this, true)} className="fa fa-expand" /> : <i onClick={this.toogleExpand.bind(this, false)} className="fa fa-compress" />}
+              </div>
+              <div>
+                <Script url="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=zvpeonXbjGkoRqVMtyQYCGVn4JQG8rd9" onLoad={this.mqLoaded} />
+              </div>
+              {this.state.mapquest ? <PositionRenderer showLayersIcons={false} devices={validDevices} allowContextMenu={false} center={validDevices[0].position} zoom={14} showPolyline={false} config={geoconfs} /> : <Loading />}
+            </div>;
+        } else {
+          return <span>
+              <div>
+                <Script url="https://www.mapquestapi.com/sdk/leaflet/v2.s/mq-map.js?key=zvpeonXbjGkoRqVMtyQYCGVn4JQG8rd9" onLoad={this.mqLoaded} />
+              </div>
+            {this.state.mapquest ? <PositionRenderer showLayersIcons={false}  devices={validDevices} allowContextMenu={false} center={validDevices[0].position} zoom={14} showPolyline={false} config={this.props.Config} /> : <Loading />}
+            </span>;
+        }
       }
-    }
 
   }
 }
