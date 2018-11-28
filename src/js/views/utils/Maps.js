@@ -91,6 +91,7 @@ class CustomMap extends Component {
     this.map = null;
     this.markers = null;
     this.subset = [];
+    this.mkrHelper = {};
     this.handleBounds = this.handleBounds.bind(this);
     this.updateMarkers = this.updateMarkers.bind(this);
     this.handleDyData = this.handleDyData.bind(this);
@@ -98,6 +99,7 @@ class CustomMap extends Component {
     this.handleMapClick = this.handleMapClick.bind(this);
     this.handleContextMenu = this.handleContextMenu.bind(this);
     this.closeContextMenu = this.closeContextMenu.bind(this);
+    this.creatingDynamicPoint = this.creatingDynamicPoint.bind(this);
   }
 
   componentDidMount() {
@@ -108,7 +110,6 @@ class CustomMap extends Component {
       center: [51.505, -0.09],
       layers: [OpenStreetMap_Mapnik]
     });
-
 
     var overlays = { Map: OpenStreetMap_Mapnik, Satelite: Esri_WorldImagery };
     L.control.layers(overlays).addTo(this.map);
@@ -129,19 +130,21 @@ class CustomMap extends Component {
     console.log("5. componentDidUpdate ", this.props.markersData, this.subset);
     console.log("5. map ", this.map);
 
-    // reseting layer to the map
-    this.map.removeLayer(OpenStreetMap_Mapnik);
-    //if (!this.map.hasLayer(OpenStreetMap_Mapnik))
-    this.map.addLayer(OpenStreetMap_Mapnik);
-
-
+    if (!this.map.hasLayer(OpenStreetMap_Mapnik)) {
+      console.log("Readding the tile layer");
+      this.map.addLayer(OpenStreetMap_Mapnik);
+    }
+    
     // check if data has changed
     if (JSON.stringify(this.props.markersData) != JSON.stringify(this.subset)) {
       this.updateMarkers();
     }
   }
 
-
+  componentWillUnmount() {
+    // removing layer to the map
+    this.map.removeLayer(OpenStreetMap_Mapnik);
+  }
 
   handleContextMenu(e, device_id, tracking) {
     console.log("handleContextMenu");
@@ -156,9 +159,8 @@ class CustomMap extends Component {
     };
     this.setState({ cm_visible: true, contextMenuInfo: this.contextMenuInfo });
   }
-  
-  closeContextMenu()
-  {
+
+  closeContextMenu() {
     this.setState({
       cm_visible: false
     });
@@ -185,17 +187,50 @@ class CustomMap extends Component {
     }
   }
 
-
   handleDyData(socket_data) {
     console.log("5. handleDyData", socket_data);
-    // MeasureActions.appendMeasures(data);
-    // DeviceActions.updateStatus(data);
+    this.creatingDynamicPoint(socket_data);
   }
 
+  creatingDynamicPoint(measureData) {
+    // 1. get device data
+    let dev = null;
+    const now = measureData.metadata.timestamp;
+    const deviceID = measureData.metadata.deviceid;
+    for (const index in this.props.markersData) {
+      if (this.props.markersData[index].id == deviceID) {
+        dev = this.props.markersData[index];
+      }
+    }
+    if (dev == null) return;
+    let myPoint = dev;
+    // 2. trying to find the dynamic geo-point
+    let geoLabel = null;
+    for (const label in measureData.attrs) {
+      if (dev.attr_label == label)
+        geoLabel = label;
+    }
+    if (geoLabel == null) return; //no attribute with position
+    let position = util.parserPosition(measureData.attrs[geoLabel]);
+    myPoint.pos = L.latLng(position[0], position[1]);
+    myPoint.timestamp = util.iso_to_date(now);
+    // 3. change Marker point
+    let hcm = this.handleContextMenu;
+    let mkr = this.mkrHelper[myPoint.id];
+    console.log("mkr", mkr);
+    mkr.setLatLng(myPoint.pos);
+    mkr.bindPopup(myPoint.name + " : " + myPoint.timestamp);
+    mkr.on("click", function (a) {
+      hcm(a, a.target.options.id, a.target.options.allow_tracking);
+      a.originalEvent.preventDefault();
+    });
+  }
+  
   updateMarkers() {
     console.log("5. this.props.markersData");
     this.subset = JSON.parse(JSON.stringify(this.props.markersData));
     this.markers.clearLayers();
+    this.mkrHelper = {};
     let hcm = this.handleContextMenu;
     this.props.markersData.forEach(marker => {
       let mkr = L.marker(marker.pos, {
@@ -204,10 +239,9 @@ class CustomMap extends Component {
         id: marker.id,
         icon: marker.pin
       });
-        if (marker.timestamp)
-          mkr.bindPopup(marker.name + " : " + marker.timestamp);
-        else
-          mkr.bindPopup(marker.name);
+      if (marker.timestamp)
+        mkr.bindPopup(marker.name + " : " + marker.timestamp);
+      else mkr.bindPopup(marker.name);
 
       mkr.on("click", function(a) {
         console.log("a", a);
@@ -216,6 +250,8 @@ class CustomMap extends Component {
       });
 
       this.markers.addLayer(mkr);
+      // creating an easy way to find the device
+      this.mkrHelper[marker.id] = mkr;
     });
     this.markers.addTo(this.map);
 
@@ -226,7 +262,6 @@ class CustomMap extends Component {
     //     console.log('marker ',a);
     // });
   }
-
 
   handleTracking(device_id) {
     console.log("5. handleTracking", device_id);
@@ -250,13 +285,13 @@ class CustomMap extends Component {
       <div className="fix-map-bug">
         <div onClick={this.handleMapClick} id="map" />
         {this.state.cm_visible ? (
-          <ContextMenuComponent 
+          <ContextMenuComponent
             closeContextMenu={this.closeContextMenu}
             handleTracking={this.handleTracking}
             metadata={this.state.contextMenuInfo}
           />
         ) : null}
-        <MapSocket receivedSocketInfo={this.handleDyData}></MapSocket>
+        <MapSocket receivedSocketInfo={this.handleDyData} />
       </div>
     );
   }
@@ -334,7 +369,7 @@ class MapSocket extends Component {
           init(reply.token);
         })
         .catch(error => {
-          // console.log('Failed!', error);
+          console.log('Failed!', error);
         });
     }
 
