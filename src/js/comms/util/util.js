@@ -17,6 +17,17 @@ FetchError.prototype.constructor = FetchError;
 
 class Util {
 
+    parserPosition(position) {
+        if (position.toString().indexOf(',') > -1) {
+            const parsedPosition = position.split(',');
+            if (parsedPosition.length > 1) {
+                return [parseFloat(parsedPosition[0]), parseFloat(parsedPosition[1])];
+            }
+        } else {
+            return undefined;
+        }
+    }
+
     checkWidthToStateOpen(opened){
         console.log("checkWidthToStateOpen");
         const width =
