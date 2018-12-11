@@ -1,0 +1,17 @@
+{
+  "menu": {
+    "devices": {
+      "label": "Dispositivos",
+      "alt": "Dispostivos e suas configurações"
+    }
+  },
+  "button": {
+    "save": {
+      "label": "Salvar",
+      "alt": "Clique para Salvar"
+    }
+  },
+  "devices": {
+    "title": "Dispositivos"
+  }
+}

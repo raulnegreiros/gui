@@ -20,5 +20,6 @@
 
 * **Is there any issue related to this PR in other repository?** (such as dojot/dojot)
 
+This PR is connected to dojot/dojot#000.
 
 * **Other information**:

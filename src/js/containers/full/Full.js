@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { Link, browserHistory } from 'react-router';
 import AltContainer from 'alt-container';
 import MenuActions from '../../actions/MenuActions';
+import { translate, Trans } from 'react-i18next';
 import MenuStore from '../../stores/MenuStore';
 import LoginStore from '../../stores/LoginStore';
 import LoginActions from '../../actions/LoginActions';
@@ -234,8 +235,8 @@ class LeftSidebar extends Component {
                 image: 'chip',
                 target: '/device',
                 iconClass: 'material-icons mi-ic-memory',
-                label: 'Devices',
-                desc: 'Known devices and configuration',
+                label: <Trans i18nKey="menu.devices.label" />,
+                desc: <Trans i18nKey="menu.devices.alt" />,
                 children: [
                     {
                         target: '/device/list', iconClass: '', label: 'device', title: 'Devices list', siblings: ['/device/id', '/device/new'],
@@ -343,7 +344,7 @@ class Full extends Component {
     componentDidMount() {
         ConfigActions.fetchCurrentConfig.defer(true);
     }
-    
+
     toggleUserSidebar() {
         this.setState({ user_sidebar: !this.state.user_sidebar });
     }

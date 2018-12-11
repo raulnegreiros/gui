@@ -1,0 +1,17 @@
+{
+  "menu": {
+    "devices": {
+      "label": "Devices",
+      "alt": "Known devices and configuration"
+    }
+  },
+  "button": {
+    "save": {
+      "label": "Save",
+      "alt": "Click to save"
+    }
+  },
+  "devices": {
+    "title": "Devices"
+  }
+}
