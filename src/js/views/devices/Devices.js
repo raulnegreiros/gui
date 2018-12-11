@@ -16,6 +16,7 @@ import { DeviceCardList } from './DeviceCard';
 import {
     Pagination, FilterLabel, GenericOperations,
 } from '../utils/Manipulation';
+import { Trans } from 'react-i18next';
 
 
 // UI elements
@@ -105,11 +106,11 @@ class DeviceOperations extends GenericOperations {
         }
         console.log('fetching using: ', res);
         if (this.paginationParams.page_size !== 5000) {
-            DeviceActions.fetchDevices.defer(res, cb); 
+            DeviceActions.fetchDevices.defer(res, cb);
         }
         else
         {
-            MapPositionActions.fetchDevices.defer(res, cb); 
+            MapPositionActions.fetchDevices.defer(res, cb);
         }
     }
 }
@@ -133,7 +134,7 @@ class Devices extends Component {
     // DeviceActions.fetchDevices.defer();
         // console.log('devices: componentDidMount');
         this.dev_opex._fetch();
- 
+
  /*
         // Realtime
         const socketio = require('socket.io-client');
@@ -212,7 +213,7 @@ class Devices extends Component {
         return (
             <div className="full-device-area">
                 <AltContainer store={DeviceStore}>
-                    <NewPageHeader title="Devices" subtitle="" icon="device">
+                    <NewPageHeader title={<Trans i18nKey="devices.title" />} subtitle="" icon="device">
                         <FilterLabel ops={this.dev_opex} text="Filtering Devices" />
                         <Pagination show_pagination={show_pagination} ops={this.dev_opex} />
                         <OperationsHeader displayToggle={displayToggle} toggleSearchBar={this.toggleSearchBar.bind(this)} />
