@@ -3,6 +3,7 @@ language: node_js
 node_js: 9
 script:
   - yarn run build
+  - docker build -t ${TRAVIS_REPO_SLUG} -f docker/Dockerfile .
 install:
   - yarn install
 services:
